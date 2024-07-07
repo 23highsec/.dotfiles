@@ -1,0 +1,9 @@
+[github]
+	user = USERNAME
+[user]
+	name = AUTHORNAME
+	email = AUTHOREMAIL
+	signingkey = GIT_SIGNINGKEY
+[credential]
+	helper = GIT_CREDENTIAL_HELPER
+[alias]
