@@ -14,7 +14,10 @@ Es werden ein paar Tools benötigt:
 Falls kein gpg Key vorhanden ist, einen neuen Key anlegen und mit einer
 Passphrase belegen.
 ```
-gpg --gen-key
+gpg --full-generate-key
+# RSA 4096
+# Expire never 0
+# Email vom jeweiligen Git-Account
 ```
 
 ### GPG Keys backup
@@ -23,18 +26,18 @@ Die erstellten Keys können im Repository mit gesichert werden.
 Dazu werden die Keys in einem verschlüsselten Container mittels Master Passwort
 abgelegt.
 
-Dazu gibt es die Tools unter `local_bin.symlink\bin`
+Dazu gibt es die Tools unter `~/.dotfiles/local_bin.symlink/bin`
 
 ```
-# ./local_bin.symlink\bin\gnupg-backup -h
+# ~/.dotfiles/local_bin.symlink/bin/gnupg-backup -h
 mkdir -p .crypto
-./local_bin.symlink\bin\gnupg-backup -e "" .crypto
+~/.dotfiles/local_bin.symlink/bin/gnupg-backup -e "" .crypto
 ```
 
 ### GPG Keys restore
 
 ```
-./local_bin.symlink\bin\gnupg-restore .crypto\<cryptofile>
+~/.dotfiles/local_bin.symlink/bin/gnupg-restore .crypto/<cryptofile>
 ```
 
 ## Netrc
@@ -58,9 +61,10 @@ protocol https
 ### Netrc encrypt
 
 ```
-gpg -e -r ~/.netrc
+gpg -o ~/.dotfiles/netrc/netrc.gpg.symlink -e -r <EMAIL> ~/.netrc
 ```
 Jetzt sollte ein `.netrc.gpg` entstanden sein.
+Danach kann die `.netrc` gelöscht werden.
 
 ### Netrc dencrypt
 
