@@ -1,0 +1,70 @@
+#!/bin/bash
+
+function show_glyphs() {
+	START=$(printf '%d' $1)
+	END=$(printf '%d' $2)
+	echo ${FUNCNAME[1]}:|tr a-z A-Z
+	for i in $(eval echo "{$START..$END}")
+	do
+		EMOJI="$(printf '\\\\u%.4x' ${i})"
+#eval echo -ne "$(printf '\\\\u%.4x' ${i})\ "
+		echo -ne "$EMOJI "
+		eval echo -ne "$EMOJI\ "
+	done
+	read
+	echo -e '\n'
+}
+function set_1() {
+	show_glyphs 0xe5fa 0xe62b
+}
+function set_2() {
+	show_glyphs 0xe700 0xe7cf
+}
+function awesome_1() {
+	show_glyphs 0xeffe 0xf0eb
+}
+function awesome_2() {
+	show_glyphs 0xf0ec 0xf1d9
+}
+function awesome_3() {
+	show_glyphs 0xf1da 0xf294
+}
+function awesome_4() {
+	show_glyphs 0xf2a6 0xf2e9
+}
+function awesome_extension_1() {
+	show_glyphs 0xe200 0xe2a9
+}
+function iec_power_1() {
+	show_glyphs 0x23ed 0x240e
+}
+function iec_power_2() {
+	show_glyphs 0x2b4c 0x2b5c
+}
+function logos() {
+	show_glyphs 0xf300 0xf31f
+}
+function octicons() {
+	show_glyphs 0xf400 0xf67c
+}
+function all_chars() {
+	show_glyphs 0x0000 0xffff
+}
+
+
+function show_all()
+{
+	set_1
+	set_2
+	awesome_1
+	awesome_2
+	awesome_3
+	awesome_4
+	awesome_extension_1
+	iec_power_1
+	iec_power_2
+	logos
+	octicons
+}
+show_all
+

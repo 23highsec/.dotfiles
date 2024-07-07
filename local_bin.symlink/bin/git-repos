@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+usage () {
+
+cat << USAGE
+$(basename $0) [USER]
+List all repositories from a github user.
+
+EXAMPLE:
+USER - list all repositories:
+	git-repos USER
+
+USAGE
+exit
+}
+
+fail () {
+	printf "\r\033[2K[\033[0;31m$1\033[0m] $2"
+	exit
+}
+if [ "$1" == "--help" ]; then
+				usage
+fi
+USER=$1
+if [ $# -lt 1 ]; then
+				GHUSER=$(git config --get github.user)
+				USER=${GHUSER}
+fi
+
+#						 jq -C '((if (.detail|length) > 0 then .detail else empty end),(.results[]?|.["name"]))'|			\
+REPOS=`curl -L -s "https://api.github.com/users/${USER}/repos?per_page=100&sort=pushed&direction=asc"| \
+				jq -C .[].clone_url`
+#||fail ${USER} "not found")|sort`
+
+#if [ -n "$2" ]; then
+#	REPOS=`echo "${REPOS}"|(grep "$2"||fail $2 "not found")`
+#fi
+
+echo "${REPOS}"
+
+## TODO
+#{
+#  message: Not Found,
+#  documentation_url: https://developer.github.com/v3
+#}
+

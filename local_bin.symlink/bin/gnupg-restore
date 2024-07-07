@@ -1,0 +1,29 @@
+#!/bin/bash
+# Restore/import gnupg
+PATH_TO_GPG_TAR_FILE=$1
+if [ ! $# -eq 1 ]
+then
+	echo USAGE:
+	echo $(basename $0) PATH_TO_GPG_TAR_FILE
+	exit
+fi
+
+#create gpg config files if they don't exist and suppress warnings =)
+{
+				gpg --fingerprint
+} &> /dev/null
+
+echo importing key-pair and trusdb...
+gpg --decrypt $PATH_TO_GPG_TAR_FILE | tar xOz --wildcards \
+						--no-anchored '*.key' | gpg --import $TAR_FILENAME
+
+if [ $? -ne 0 ]
+then
+	echo Something went wrong!
+	echo Maybe wrong password?
+	echo exiting...
+	exit
+fi
+
+gpg --decrypt $PATH_TO_GPG_TAR_FILE | tar xOz --wildcards \
+						--no-anchored '*.gpg' | gpg --import-ownertrust $TAR_FILENAME

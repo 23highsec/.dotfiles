@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+usage () {
+
+cat << USAGE
+$(basename $0) IMAGE [TAG]
+List all tags for a Docker image on a remote registry.
+
+EXAMPLE:
+IMAGE - list all tags for centos:
+	dockertags centos
+
+TAG   - list all php tags containing apache:
+	dockertags php apache
+
+
+specialcase:
+      - list specific tag number has to be escaped:
+	dockertags centos 7\\\\.
+USAGE
+exit
+}
+
+fail () {
+	printf "\r\033[2K[\033[0;31m$1\033[0m] $2"
+	exit
+}
+if [ $# -lt 1 ]; then
+				usage
+fi
+IMAGE=$1
+TAGS=`curl -L -s "https://registry.hub.docker.com/v2/repositories/library/${IMAGE}/tags?page_size=1024"|	\
+						 jq -C '((if (.detail|length) > 0 then .detail else empty end),(.results[]?|.["name"]))'|			\
+						 sort`
+
+if [ -n "$2" ]; then
+	TAGS=`echo "${TAGS}"|(grep "$2"||fail $2 "not found")`
+fi
+
+echo "${TAGS}"
